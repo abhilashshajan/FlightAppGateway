@@ -1,0 +1,37 @@
+server:
+  port: 8080
+ 
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8081/eureka 
+
+spring:
+  application:
+    name: flightapp-gateway-service
+  cloud:
+    gateway:
+      routes:
+      - id: authModule
+        uri: lb://FLIGHTAPP-AUTH-SERVICE
+        predicates:
+        - Path=/api/auth/**
+      - id: airlineModule
+        uri: lb://FLIGHTAPP-AIRLINE-SERVICE
+        predicates:
+        - Path=/api/airline/**
+      - id: bookingModule
+        uri: lb://FLIGHTAPP-BOOKING-SERVICE
+        predicates:
+        - Path=/api/booking/**
+      - id: searchModule
+        uri: lb://FLIGHTAPP-SEARCH-SERVICE
+        predicates:
+        - Path=/api/search/**
+
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:4200"
+            allowedHeaders: "*"
+            allowedMethods: "*"
